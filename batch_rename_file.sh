@@ -1,0 +1,48 @@
+#!/bin/bash
+
+FILE_PATH=$1
+
+RENAME_FILE_NAME=$2
+
+echo $RENAME_FILE_NAME
+
+if [[ $RENAME_FILE_NAME == "" ]]; then
+	RENAME_FILE_NAME="file"
+fi
+
+echo "file path: $FILE_PATH"
+
+cd $FILE_PATH
+
+FILE_NAME_LIST=$(ls $FILE_PATH)
+
+# for i in $FILE_NAME_LIST; do
+# 	echo $i
+# done
+
+FILE_COUNT=${#FILE_NAME_LIST[*]}
+
+CURRENT_FILE_COUNT=0
+
+# while可能不太行
+# while [[ $CURRENT_FILE_COUNT -lt $FILE_COUNT ]]; do
+# 	FILE_FULL_NAME=${FILE_NAME_LIST[${CURRENT_FILE_COUNT}]}
+# 	# echo $FILE_FULL_NAME
+# 	# let "CURRENT_FILE_COUNT++"
+# 	FILE_NAME=${FILE_FULL_NAME%%.*}
+# 	FILE_FORMAT_NAME=${FILE_FULL_NAME##*.}
+# 	echo -e "file name : $FILE_NAME, file format: $FILE_FORMAT_NAME \n"
+# 	CURRENT_FILE_COUNT=`expr $CURRENT_FILE_COUNT + 1`
+# done
+
+for i in $FILE_NAME_LIST; do
+	FILE_FULL_NAME=$i
+	FILE_NAME=${FILE_FULL_NAME%%.*}
+	FILE_FORMAT_NAME=${FILE_FULL_NAME##*.}
+	FILE_RENAME_TO=$RENAME_FILE_NAME$CURRENT_FILE_COUNT.$FILE_FORMAT_NAME
+	mv $FILE_FULL_NAME $FILE_RENAME_TO
+	echo -e "file name : $FILE_NAME, file format: $FILE_FORMAT_NAME. rename to: $FILE_RENAME_TO \n"
+	CURRENT_FILE_COUNT=`expr $CURRENT_FILE_COUNT + 1`
+done
+
+echo $FILE_COUNT
